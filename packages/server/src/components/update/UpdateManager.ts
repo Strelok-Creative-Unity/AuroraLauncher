@@ -1,6 +1,6 @@
 import path from "path";
 
-import { HttpHelper } from "@aurora-launcher/core";
+import { HttpHelper } from "@aurora-launcher-arsland-team/core";
 import { LogHelper, StorageHelper, SystemHelper } from "@root/utils";
 import semver from "semver";
 import { Service } from "typedi";

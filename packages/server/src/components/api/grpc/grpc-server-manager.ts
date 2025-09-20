@@ -1,19 +1,19 @@
+import { existsSync, readFileSync } from "fs";
+
+import * as proto from "@aurora-launcher-arsland-team/proto";
+import { ServerCredentials } from "@grpc/grpc-js";
+import { ConfigManager, LangManager, VerifyManager } from "@root/components";
 import { ArgsManager } from "@root/components/args";
 import { LogHelper } from "@root/utils";
-import { ConfigManager, LangManager, VerifyManager} from "@root/components";
-import { createServer, ServerMiddlewareCall, CallContext, ServerError, Status } from 'nice-grpc';
-import { ServerCredentials } from '@grpc/grpc-js';
+import { isAbortError } from "abort-controller-x";
+import { CallContext, ServerError, ServerMiddlewareCall, Status, createServer } from "nice-grpc";
 import { Service } from "typedi";
-import { readFileSync, existsSync } from "fs";
-import * as proto from "@aurora-launcher/proto";
-import { ServiceImpl } from "./Requests";
-import { TokenManager } from "./Token";
 
-import { isAbortError } from 'abort-controller-x';
+import { TokenManager } from "../utils/token";
+import { ServiceImpl } from "./Requests";
 
 @Service()
 export class GrpcServerManager {
-
     constructor(
         private langManager: LangManager,
         private requests: ServiceImpl,
@@ -27,27 +27,27 @@ export class GrpcServerManager {
             call: ServerMiddlewareCall<Request, Response>,
             context: CallContext,
         ) {
-            const {path} = call.method;
-            
-            LogHelper.debug('Server call', path, 'request:', call.request);
-            
+            const { path } = call.method;
+
+            LogHelper.debug("Server call", path, "request:", call.request);
+
             try {
                 const result = yield* call.next(call.request, context);
-            
-                LogHelper.debug('Server call', path, 'response:', result);
-            
+
+                LogHelper.debug("Server call", path, "response:", result);
+
                 return result;
             } catch (error) {
                 if (error instanceof ServerError) {
                     LogHelper.debug(
-                        'Server call',
+                        "Server call",
                         path,
                         `end: ${Status[error.code]}: ${error.details}`,
                     );
                 } else if (isAbortError(error)) {
-                    LogHelper.debug('Server call', path, 'cancel');
+                    LogHelper.debug("Server call", path, "cancel");
                 } else {
-                    LogHelper.debug('Server call', path, `error: ${error?.stack}`);
+                    LogHelper.debug("Server call", path, `error: ${error?.stack}`);
                 }
                 throw error;
             }
@@ -56,22 +56,21 @@ export class GrpcServerManager {
             call: ServerMiddlewareCall<Request, Response>,
             context: CallContext,
         ) {
-            if (call.method.path.includes('/getToken')) {
+            if (call.method.path.includes("/getToken")) {
                 return yield* call.next(call.request, context);
             }
-            const authorization = context.metadata.get('Authorization')
-            let decryptedToken
+            const authorization = context.metadata.get("Authorization");
+            let decryptedToken;
             try {
-                decryptedToken = verifyManager.decryptToken(authorization)
+                decryptedToken = verifyManager.decryptToken(authorization);
             } catch {
                 throw new ServerError(Status.UNAUTHENTICATED, "Token not found");
             }
             if (decryptedToken == tokenManager.getToken()) {
                 return yield* call.next(call.request, context);
-            }
-            else throw new ServerError(Status.UNAUTHENTICATED, "Invalid token");
+            } else throw new ServerError(Status.UNAUTHENTICATED, "Invalid token");
         }
-        
+
         const server = createServer().use(loggingMiddleware).use(SecureMiddleware);
         server.add(proto.AuroraLauncherServiceDefinition, requests);
 
@@ -89,8 +88,12 @@ export class GrpcServerManager {
             const key = readFileSync(config.config.api.ssl.key);
             const cert = readFileSync(config.config.api.ssl.cert);
             const root_cert = readFileSync(config.config.api.ssl.root_cert);
-            credentials = ServerCredentials.createSsl(root_cert, [{cert_chain: cert, private_key: key}], false);
+            credentials = ServerCredentials.createSsl(
+                root_cert,
+                [{ cert_chain: cert, private_key: key }],
+                false,
+            );
         }
-        server.listen(`${host}:${Number(port)+1}`, credentials);
+        server.listen(`${host}:${Number(port) + 1}`, credentials);
     }
 }

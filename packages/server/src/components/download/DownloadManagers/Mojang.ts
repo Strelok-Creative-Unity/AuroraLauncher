@@ -1,8 +1,8 @@
 import { mkdir, writeFile } from "fs/promises";
 import path, { resolve } from "path";
 
-import { HttpHelper, JsonHelper, OS, ProfileLibrary } from "@aurora-launcher/core";
-import { MojangAssets } from "@aurora-launcher/core";
+import { HttpHelper, JsonHelper, OS, ProfileLibrary } from "@aurora-launcher-arsland-team/core";
+import { MojangAssets } from "@aurora-launcher-arsland-team/core";
 import { LogHelper, ProgressHelper, StorageHelper } from "@root/utils";
 import { Service } from "typedi";
 

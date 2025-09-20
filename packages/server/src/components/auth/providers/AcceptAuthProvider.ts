@@ -1,10 +1,10 @@
 import { randomUUID } from "crypto";
 
-import { AuthResponseData } from "@aurora-launcher/core";
+import { AuthResponseData } from "@aurora-launcher-arsland-team/core";
 import { LauncherServerConfig } from "@root/components/config/utils/LauncherServerConfig";
-import { SkinManager } from "../../skin";
 import { v5 } from "uuid";
 
+import { SkinManager } from "../../skin";
 import {
     AuthProvider,
     HasJoinedResponseData,
@@ -23,8 +23,7 @@ export class AcceptAuthProvider implements AuthProvider {
     }
 
     auth(username: string): AuthResponseData {
-        
-        const userUUID = v5(username, this.projectID)
+        const userUUID = v5(username, this.projectID);
         const data = {
             username,
             userUUID,

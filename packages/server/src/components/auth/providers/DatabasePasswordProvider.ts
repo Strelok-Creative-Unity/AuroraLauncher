@@ -1,4 +1,4 @@
-import { HashHelper } from "@aurora-launcher/core";
+import { HashHelper } from "@aurora-launcher-arsland-team/core";
 import { argon2Verify, bcryptVerify } from "hash-wasm";
 
 import { DatabaseAuthProviderConfig } from "./DatabaseAuthProvider";

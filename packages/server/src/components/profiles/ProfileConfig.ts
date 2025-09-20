@@ -1,6 +1,11 @@
 import { randomUUID } from "crypto";
 
-import { JsonHelper, Profile, ProfileLibrary, ProfileServerConfig } from "@aurora-launcher/core";
+import {
+    JsonHelper,
+    Profile,
+    ProfileLibrary,
+    ProfileServerConfig,
+} from "@aurora-launcher-arsland-team/core";
 import { instanceToPlain, plainToInstance } from "class-transformer";
 import { merge } from "lodash-es";
 

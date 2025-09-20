@@ -1,7 +1,7 @@
 import fs from "fs/promises";
 import { join } from "path";
 
-import { HashHelper, HashedFile } from "@aurora-launcher/core";
+import { HashHelper, HashedFile } from "@aurora-launcher-arsland-team/core";
 import { LogHelper, StorageHelper } from "@root/utils";
 import { Service } from "typedi";
 
@@ -11,16 +11,19 @@ import { LangManager } from "../langs";
 export class ClientsManager {
     readonly hashedClients = new Map<string, HashedFile[]>();
 
-    constructor(private readonly langManager: LangManager, client?:string) {
+    constructor(
+        private readonly langManager: LangManager,
+        client?: string,
+    ) {
         this.hashClients(client);
     }
 
-    async hashClients(client?:string): Promise<void> {
+    async hashClients(client?: string): Promise<void> {
         const folders = await fs.readdir(StorageHelper.clientsDir, {
             withFileTypes: true,
         });
         let dirs = folders.filter((folder) => folder.isDirectory());
-        if (client!== undefined) {
+        if (client !== undefined) {
             dirs = folders.filter((folder) => folder.name == client);
         }
 
@@ -56,7 +59,8 @@ export class ClientsManager {
         for (const entry of entries) {
             const entryPath = join(dirPath, entry.name);
             if (entry.isDirectory()) {
-                arrayOfFiles.push(...(await this.hashDir(entryPath)));
+                const hashedFiles = await this.hashDir(entryPath);
+                arrayOfFiles.push(...hashedFiles);
             } else {
                 arrayOfFiles.push(await this.hashFile(entryPath));
             }

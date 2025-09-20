@@ -1,5 +1,6 @@
-import { AuthResponseData } from "@aurora-launcher/core";
+import { AuthResponseData } from "@aurora-launcher-arsland-team/core";
 import { LauncherServerConfig } from "@root/components/config/utils/LauncherServerConfig";
+
 import { SkinManager } from "../../skin/SkinManager";
 
 export interface AuthProviderConstructor {

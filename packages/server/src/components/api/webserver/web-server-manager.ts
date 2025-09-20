@@ -1,22 +1,21 @@
-import { fastify } from 'fastify';
-import { Service, Inject } from "typedi";
-import { readFileSync, existsSync } from "fs";
+import { existsSync, readFileSync } from "fs";
 
-import { ConfigManager, LangManager} from "@root/components";
+import { ConfigManager, LangManager } from "@root/components";
 import { ArgsManager } from "@root/components/args";
-import { AuthlibManager } from "@root/components/authlib";
 import type { AuthProvider } from "@root/components/auth/providers";
+import { AuthlibManager } from "@root/components/authlib";
 import { VerifyManager } from "@root/components/secure/VerifyManager";
 import { LogHelper } from "@root/utils";
+import { fastify } from "fastify";
+import { Inject, Service } from "typedi";
 
-import genericRoutes from "./requests/generic";
+import { TokenManager } from "../utils/token";
 import authlibRoutes from "./requests/authlib";
+import genericRoutes from "./requests/generic";
 import releaseServerRoutes from "./requests/release-server";
-import { TokenManager } from './Token';
 
 @Service()
 export class WebServerManager {
-
     constructor(
         @Inject("AuthProvider") private authProvider: AuthProvider,
         private langManager: LangManager,
@@ -41,17 +40,22 @@ export class WebServerManager {
             options = {
                 ca: readFileSync(this.configManager.config.api.ssl.root_cert),
                 key: readFileSync(this.configManager.config.api.ssl.key),
-                cert: readFileSync(this.configManager.config.api.ssl.cert)
+                cert: readFileSync(this.configManager.config.api.ssl.cert),
             };
         }
-        let logger = false
-        if (process.argv.includes("--debug") || process.env.AURORA_IS_DEBUG === "true" || process.argv.includes("--dev") || process.env.AURORA_IS_DEV === "true")
-            logger = true
-        const web = fastify({logger, https: options});
+        let logger = false;
+        if (
+            process.argv.includes("--debug") ||
+            process.env.AURORA_IS_DEBUG === "true" ||
+            process.argv.includes("--dev") ||
+            process.env.AURORA_IS_DEV === "true"
+        )
+            logger = true;
+        const web = fastify({ logger, https: options });
 
         web.register(genericRoutes, {
-            disableListing: this.configManager.config.api.disableListing, 
-            hideListing: this.configManager.config.api.hideListing
+            disableListing: this.configManager.config.api.disableListing,
+            hideListing: this.configManager.config.api.hideListing,
         });
         web.register(authlibRoutes, {
             configManager: this.configManager,

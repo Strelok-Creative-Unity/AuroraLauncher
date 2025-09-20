@@ -3,7 +3,7 @@ import { createHash } from "crypto";
 import { cpSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from "fs";
 import { extname, resolve } from "path";
 
-import { JsonHelper, ProfileLibrary, ZipHelper } from "@aurora-launcher/core";
+import { JsonHelper, ProfileLibrary, ZipHelper } from "@aurora-launcher-arsland-team/core";
 import { LogHelper, StorageHelper } from "@root/utils";
 import semver from "semver";
 import { Service } from "typedi";

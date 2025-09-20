@@ -1,6 +1,7 @@
-import { AuthResponseData, HttpHelper } from "@aurora-launcher/core";
+import { AuthResponseData, HttpHelper } from "@aurora-launcher-arsland-team/core";
 import { LauncherServerConfig } from "@root/components/config/utils/LauncherServerConfig";
 
+import { SkinManager } from "../../skin/SkinManager";
 import {
     AuthProvider,
     AuthProviderConfig,
@@ -8,7 +9,6 @@ import {
     ProfileResponseData,
     ProfilesResponseData,
 } from "./AuthProvider";
-import { SkinManager } from "../../skin/SkinManager";
 
 export class JsonAuthProvider implements AuthProvider {
     private config: JsonAuthProviderConfig;
@@ -21,13 +21,21 @@ export class JsonAuthProvider implements AuthProvider {
 
     async auth(login: string, password: string): Promise<AuthResponseData> {
         try {
-            const response: ApiResponse<AuthResponseData> = await HttpHelper.postJson<ApiResponse<ApiAuthResponseData>>(this.config.authUrl, {
+            const response: ApiResponse<AuthResponseData> = await HttpHelper.postJson<
+                ApiResponse<ApiAuthResponseData>
+            >(this.config.authUrl, {
                 login,
                 password,
             });
             if (response.success === true) {
-                response.result.capeUrl = this.skinManager.getCape(response.result.userUUID, response.result.username);
-                response.result.skinUrl = this.skinManager.getSkin(response.result.userUUID, response.result.username);
+                response.result.capeUrl = this.skinManager.getCape(
+                    response.result.userUUID,
+                    response.result.username,
+                );
+                response.result.skinUrl = this.skinManager.getSkin(
+                    response.result.userUUID,
+                    response.result.username,
+                );
             }
             return this.parseResponse(response);
         } catch (error) {
@@ -46,10 +54,9 @@ export class JsonAuthProvider implements AuthProvider {
     }
 
     async hasJoined(username: string, serverID: string): Promise<HasJoinedResponseData> {
-        const response: ApiResponse<HasJoinedResponseData> = await HttpHelper.postJson<ApiResponse<ApiHasJoinedResponseData>>(
-            this.config.hasJoinedUrl,
-            { username, serverID },
-        );
+        const response: ApiResponse<HasJoinedResponseData> = await HttpHelper.postJson<
+            ApiResponse<ApiHasJoinedResponseData>
+        >(this.config.hasJoinedUrl, { username, serverID });
         if (response.success === true) {
             response.result.capeUrl = this.skinManager.getCape(response.result.userUUID, username);
             response.result.skinUrl = this.skinManager.getSkin(response.result.userUUID, username);
@@ -58,7 +65,9 @@ export class JsonAuthProvider implements AuthProvider {
     }
 
     async profile(userUUID: string): Promise<ProfileResponseData> {
-        const response: ApiResponse<ProfileResponseData> = await HttpHelper.postJson<ApiResponse<ApiProfileResponseData>>(this.config.profileUrl, {
+        const response: ApiResponse<ProfileResponseData> = await HttpHelper.postJson<
+            ApiResponse<ApiProfileResponseData>
+        >(this.config.profileUrl, {
             userUUID,
         });
         if (response.success === true) {
@@ -102,10 +111,10 @@ interface ApiError {
 }
 
 interface ApiAuthResponseData {
-    username: string
-    userUUID: string
-    accessToken: string
-    token:string
+    username: string;
+    userUUID: string;
+    accessToken: string;
+    token: string;
 }
 
 interface ApiHasJoinedResponseData {

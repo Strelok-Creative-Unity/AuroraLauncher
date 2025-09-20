@@ -1,6 +1,6 @@
 import { resolve } from "path";
 
-import { HashHelper, HttpHelper, ProfileLibrary } from "@aurora-launcher/core";
+import { HashHelper, HttpHelper, ProfileLibrary } from "@aurora-launcher-arsland-team/core";
 import { LogHelper, ProgressHelper, StorageHelper } from "@root/utils";
 
 import { Library } from "../interfaces/IFabric";

@@ -1,2 +1,1 @@
-export * from "./WebServerManager";
-export * from "./Token";
+export * from "./web-server-manager";

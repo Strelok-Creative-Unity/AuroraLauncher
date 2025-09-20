@@ -1,39 +1,42 @@
-import * as proto from "@aurora-launcher/proto";
-import { JsonHelper } from "@aurora-launcher/core";
-import { ServerError, Status } from 'nice-grpc';
-import { Service, Inject } from "typedi";
+import { JsonHelper } from "@aurora-launcher-arsland-team/core";
+import * as proto from "@aurora-launcher-arsland-team/proto";
 import type { AuthProvider } from "@root/components/auth/providers";
-import { ProfilesManager } from "@root/components/profiles";
 import { ClientsManager } from "@root/components/clients";
+import { ProfilesManager } from "@root/components/profiles";
 import { VerifyManager } from "@root/components/secure/VerifyManager";
-import { TokenManager } from "./Token";
+import { ServerError, Status } from "nice-grpc";
+import { Inject, Service } from "typedi";
+
+import { TokenManager } from "../utils/token";
 
 @Service()
 export class ServiceImpl implements proto.AuroraLauncherServiceImplementation {
     constructor(
-        @Inject("AuthProvider") private authProvider: AuthProvider, 
-        private profilesManager: ProfilesManager, 
+        @Inject("AuthProvider") private authProvider: AuthProvider,
+        private profilesManager: ProfilesManager,
         private clientsManager: ClientsManager,
         private verifyManager: VerifyManager,
         private tokenManager: TokenManager,
     ) {}
 
-    async auth(
-        request: proto.AuthRequest,
-    ): Promise<proto.DeepPartial<proto.AuthResponse>> {
+    async auth(request: proto.AuthRequest): Promise<proto.DeepPartial<proto.AuthResponse>> {
         try {
             const res = await this.authProvider.auth(request.login, request.password);
-            const authData = JsonHelper.toJson({"login":request.login, "password":request.password});
-            res.token = this.verifyManager.encryptToken(Buffer.from(authData, 'utf8').toString('hex'));
+            const authData = JsonHelper.toJson({
+                login: request.login,
+                password: request.password,
+            });
+            res.token = this.verifyManager.encryptToken(
+                Buffer.from(authData, "utf8").toString("hex"),
+            );
             return res;
         } catch (error) {
             throw new ServerError(Status.NOT_FOUND, error.message);
         }
     }
 
-    async getServers(
-    ): Promise<proto.DeepPartial<proto.ServersResponse>> {
-        const res: proto.ServersResponse = {servers: []};
+    async getServers(): Promise<proto.DeepPartial<proto.ServersResponse>> {
+        const res: proto.ServersResponse = { servers: [] };
 
         this.profilesManager
             .getProfiles()
@@ -46,7 +49,7 @@ export class ServiceImpl implements proto.AuroraLauncherServiceImplementation {
                     });
                 });
             });
-        
+
         return res;
     }
 
@@ -54,23 +57,22 @@ export class ServiceImpl implements proto.AuroraLauncherServiceImplementation {
         request: proto.ProfileRequest,
     ): Promise<proto.DeepPartial<proto.ProfileResponse>> {
         const res = this.profilesManager
-        .getProfiles()
-        .find((p) => p.uuid === request.uuid)
-        ?.toObject();
+            .getProfiles()
+            .find((p) => p.uuid === request.uuid)
+            ?.toObject();
         if (res) return res;
         else throw new ServerError(Status.INVALID_ARGUMENT, "Invalid uuid");
     }
-    
+
     async getUpdates(
-        request:proto.UpdateRequest,
+        request: proto.UpdateRequest,
     ): Promise<proto.DeepPartial<proto.UpdateResponse>> {
-        const res = {hashedFile: this.clientsManager.hashedClients.get(request.dir)};
-        return res
+        const res = { hashedFile: this.clientsManager.hashedClients.get(request.dir) };
+        return res;
     }
 
-    async getToken(
-    ): Promise<proto.DeepPartial<proto.VerifyResponse>> {
-        const res = {token: this.tokenManager.getEncryptedToken()};
-        return res
+    async getToken(): Promise<proto.DeepPartial<proto.VerifyResponse>> {
+        const res = { token: this.tokenManager.getEncryptedToken() };
+        return res;
     }
-  }
+}

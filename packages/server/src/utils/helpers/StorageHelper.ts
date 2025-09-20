@@ -2,17 +2,17 @@ import { PathLike, existsSync, mkdirSync } from "fs";
 import { rm } from "fs/promises";
 import { dirname, resolve } from "path";
 
-import { StorageHelper as CoreStorageHelper } from "@aurora-launcher/core";
+import { StorageHelper as CoreStorageHelper } from "@aurora-launcher-arsland-team/core";
 
 import { SystemHelper } from "./SystemHelper";
 
 export class StorageHelper extends CoreStorageHelper {
     /* Folders */
-    static readonly storageDir: string = process.env.AURORA_STORAGE_OVERRIDE 
-        ? resolve(process.env.AURORA_STORAGE_OVERRIDE) 
+    static readonly storageDir: string = process.env.AURORA_STORAGE_OVERRIDE
+        ? resolve(process.env.AURORA_STORAGE_OVERRIDE)
         : SystemHelper.isStandalone()
-            ? dirname(process.execPath)
-            : __dirname;
+          ? dirname(process.execPath)
+          : __dirname;
     static readonly gameFilesDir: string = resolve(this.storageDir, "gameFiles");
     static readonly releaseDir: string = resolve(this.gameFilesDir, "release");
     static readonly clientsDir: string = resolve(this.gameFilesDir, "clients");

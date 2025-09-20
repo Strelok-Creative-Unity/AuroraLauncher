@@ -1,8 +1,11 @@
-import { AuthResponseData } from "@aurora-launcher/core";
+import { randomUUID } from "crypto";
+
+import { AuthResponseData } from "@aurora-launcher-arsland-team/core";
 import { LauncherServerConfig } from "@root/components/config/utils/LauncherServerConfig";
 import { LogHelper } from "@root/utils";
 import { DataSource, EntitySchema, In } from "typeorm";
 
+import { SkinManager } from "../../skin/SkinManager";
 import {
     AuthProvider,
     AuthProviderConfig,
@@ -10,9 +13,7 @@ import {
     ProfileResponseData,
     ProfilesResponseData,
 } from "./AuthProvider";
-import { randomUUID } from "crypto";
 import { DatabasePasswordProvider } from "./DatabasePasswordProvider";
-import { SkinManager } from "../../skin/SkinManager";
 
 export class DatabaseAuthProvider implements AuthProvider {
     private userRepository;

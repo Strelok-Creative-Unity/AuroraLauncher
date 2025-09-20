@@ -1,8 +1,8 @@
 import { resolve } from "path";
 import { URL } from "url";
 
-import { HttpHelper, ZipHelper } from "@aurora-launcher/core";
-import { Profile } from "@aurora-launcher/core";
+import { HttpHelper, ZipHelper } from "@aurora-launcher-arsland-team/core";
+import { Profile } from "@aurora-launcher-arsland-team/core";
 import { LogHelper, ProgressHelper, StorageHelper } from "@root/utils";
 import { Service } from "typedi";
 
