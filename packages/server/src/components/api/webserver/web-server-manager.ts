@@ -2,7 +2,7 @@ import { existsSync, readFileSync } from "fs";
 
 import { ConfigManager, LangManager } from "@root/components";
 import { ArgsManager } from "@root/components/args";
-import type { AuthProvider } from "@root/components/auth/providers";
+import type { AuthProvider } from "@root/components/auth/base/auth-provider";
 import { AuthlibManager } from "@root/components/authlib";
 import { VerifyManager } from "@root/components/secure/VerifyManager";
 import { LogHelper } from "@root/utils";

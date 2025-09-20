@@ -8,12 +8,16 @@ import { DataSource, EntitySchema, In } from "typeorm";
 import { SkinManager } from "../../skin/SkinManager";
 import {
     AuthProvider,
-    AuthProviderConfig,
+    DatabasePasswordProvider,
     HasJoinedResponseData,
     ProfileResponseData,
     ProfilesResponseData,
-} from "./AuthProvider";
-import { DatabasePasswordProvider } from "./DatabasePasswordProvider";
+} from "../base";
+import {
+    DatabaseProviderWithPasswordConfig,
+    UserEntityWithPassword,
+    UserEntityWithPasswordProperties,
+} from "../types";
 
 export class DatabaseAuthProvider implements AuthProvider {
     private userRepository;
@@ -21,8 +25,8 @@ export class DatabaseAuthProvider implements AuthProvider {
     private passwordProvider;
 
     constructor({ auth }: LauncherServerConfig, skinManager: SkinManager) {
-        const authConfig = <DatabaseAuthProviderConfig>auth;
-        this.passwordProvider = new DatabasePasswordProvider(authConfig);
+        const authConfig = <DatabaseProviderWithPasswordConfig>auth;
+        this.passwordProvider = new DatabasePasswordProvider(authConfig as any);
         this.skinManager = skinManager;
 
         if (!authConfig.properties.tableName) {
@@ -53,6 +57,7 @@ export class DatabaseAuthProvider implements AuthProvider {
             skinUrl: this.skinManager.getSkin(user.userUUID, username),
             capeUrl: this.skinManager.getCape(user.userUUID, username),
             accessToken: randomUUID(),
+            token: randomUUID(),
         };
 
         await this.userRepository.update(
@@ -109,8 +114,8 @@ export class DatabaseAuthProvider implements AuthProvider {
     }
 }
 
-const getUserEntity = (properties: DatabaseAuthProviderConfig["properties"]) => {
-    return new EntitySchema<UserEntity>({
+const getUserEntity = (properties: UserEntityWithPasswordProperties) => {
+    return new EntitySchema<UserEntityWithPassword>({
         name: "user",
         tableName: properties.tableName,
         columns: {
@@ -142,33 +147,7 @@ const getUserEntity = (properties: DatabaseAuthProviderConfig["properties"]) => 
     });
 };
 
-export class DatabaseAuthProviderConfig extends AuthProviderConfig {
+export class DatabaseAuthProviderConfig extends DatabaseProviderWithPasswordConfig {
     passwordVerfier: string;
     passwordSalt?: string;
-    connection: {
-        type: AvaliableDataBaseType;
-        host: string;
-        port: number;
-        username: string;
-        password: string;
-        database: string;
-    };
-    properties: {
-        tableName: string;
-        uuidColumn: string;
-        usernameColumn: string;
-        passwordColumn: string;
-        accessTokenColumn: string;
-        serverIdColumn: string;
-    };
-}
-
-type AvaliableDataBaseType = "mysql" | "mariadb" | "postgres" | "sqlite" | "oracle" | "mssql";
-
-interface UserEntity {
-    username: string;
-    password: string;
-    userUUID: string;
-    accessToken: string;
-    serverID: string;
 }

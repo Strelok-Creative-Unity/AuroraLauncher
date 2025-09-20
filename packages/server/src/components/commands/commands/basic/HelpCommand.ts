@@ -1,9 +1,9 @@
 import { LangManager } from "@root/components/langs";
 import { AbstractCommand, Category, LogHelper } from "@root/utils";
 import chalk from "chalk";
+import { Inject, Service } from "typedi";
 
 import { CommandsManager } from "../..";
-import { Inject, Service } from "typedi";
 
 @Service()
 export class HelpCommand extends AbstractCommand {
@@ -21,7 +21,7 @@ export class HelpCommand extends AbstractCommand {
 
     invoke(): void {
         const commandsList: Map<Category, AbstractCommand[]> = new Map(
-            Object.values(Category).map((c) => [c, []]),
+            Object.values(Category).map<[Category, AbstractCommand[]]>((c) => [c, []]),
         );
 
         this.commandsManager.commands.forEach((command: AbstractCommand) => {

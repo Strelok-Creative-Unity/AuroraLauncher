@@ -1,6 +1,6 @@
 import { LauncherServerConfig } from "@root/components/config/utils/LauncherServerConfig";
 
-import { AuthProvider, AuthProviderConfig } from "./AuthProvider";
+import { AuthProvider, AuthProviderConfig } from "../base/auth-provider";
 
 export class RejectAuthProvider implements AuthProvider {
     private message: string;

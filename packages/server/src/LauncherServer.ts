@@ -13,6 +13,7 @@ import {
     ConfigManager,
     DatabaseAuthProvider,
     DownloadClientCommand,
+    GrpcServerManager,
     HelpCommand,
     JsonAuthProvider,
     LangCommand,
@@ -25,9 +26,9 @@ import {
     SyncAllCommand,
     SyncClientsCommand,
     SyncProfilesCommand,
+    USAWithDatabaseAuthProvider,
     UpdateCommand,
     UpdateManager,
-    GrpcServerManager,
     Watcher,
     WebServerManager,
 } from "./components";
@@ -88,6 +89,7 @@ export class LauncherServer {
             db: DatabaseAuthProvider,
             reject: RejectAuthProvider,
             accept: AcceptAuthProvider,
+            usa: USAWithDatabaseAuthProvider,
         });
 
         this._AuthProvider = AuthManager.getProvider(this._ConfigManager, this._LangManager);

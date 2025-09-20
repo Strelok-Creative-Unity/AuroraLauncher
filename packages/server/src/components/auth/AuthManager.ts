@@ -3,8 +3,8 @@ import { Service } from "typedi";
 
 import { ConfigManager } from "../config";
 import { LangManager } from "../langs";
-import { AuthProvider, AuthProviderConstructor } from "./providers";
 import { SkinManager } from "../skin/SkinManager";
+import { AuthProvider, AuthProviderConstructor } from "./base";
 
 @Service()
 export class AuthManager {

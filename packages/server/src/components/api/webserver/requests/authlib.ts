@@ -1,5 +1,5 @@
 import { JsonHelper } from "@aurora-launcher-arsland-team/core";
-import type { AuthProvider } from "@root/components/auth/providers";
+import type { AuthProvider } from "@root/components/auth/";
 import { AuthlibManager } from "@root/components/authlib";
 import { ConfigManager } from "@root/components/config";
 import { SkinManager } from "@root/components/skin";

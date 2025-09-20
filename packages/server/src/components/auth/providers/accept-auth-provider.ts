@@ -10,7 +10,7 @@ import {
     HasJoinedResponseData,
     ProfileResponseData,
     ProfilesResponseData,
-} from "./AuthProvider";
+} from "../base";
 
 export class AcceptAuthProvider implements AuthProvider {
     private projectID: string;
@@ -24,12 +24,14 @@ export class AcceptAuthProvider implements AuthProvider {
 
     auth(username: string): AuthResponseData {
         const userUUID = v5(username, this.projectID);
+        const accessToken = randomUUID();
         const data = {
             username,
             userUUID,
-            accessToken: randomUUID(),
+            accessToken,
             skinUrl: this.skinManager.getSkin(userUUID, username),
             capeUrl: this.skinManager.getCape(userUUID, username),
+            token: accessToken,
         };
 
         const userIndex = this.sessionsDB.findIndex((user) => user.username === username);

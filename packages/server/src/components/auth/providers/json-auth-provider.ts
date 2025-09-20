@@ -8,7 +8,7 @@ import {
     HasJoinedResponseData,
     ProfileResponseData,
     ProfilesResponseData,
-} from "./AuthProvider";
+} from "../base";
 
 export class JsonAuthProvider implements AuthProvider {
     private config: JsonAuthProviderConfig;

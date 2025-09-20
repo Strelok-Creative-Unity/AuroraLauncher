@@ -13,7 +13,11 @@
 
 ---
 
-## FORK
+На данный момент лаунчер находится в разработке, но вы можете помочь мне с кодом или ведением задач. Или например предлагать свои идеи в раздел [Issues](https://github.com/AuroraTeam/LauncherServer/issues).
+А также вы можете поддержать меня материально:
 
-Этот репозиторий является форком [AuroraTeam/LauncherServer](https://github.com/AuroraTeam/LauncherServer).  
-Проект в активной разработке. Обсуждения и задачи — в разделе [Issues](https://github.com/AuroraTeam/LauncherServer/issues).
+-   Перевод на карту: `4276 3000 2167 4414`
+
+## Мы в Discord
+
+[![](https://discord.com/api/guilds/730131402636525688/embed.png?style=banner2)](https://discord.gg/2NvYTcv)

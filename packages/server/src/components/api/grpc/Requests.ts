@@ -1,6 +1,6 @@
 import { JsonHelper } from "@aurora-launcher-arsland-team/core";
 import * as proto from "@aurora-launcher-arsland-team/proto";
-import type { AuthProvider } from "@root/components/auth/providers";
+import type { AuthProvider } from "@root/components/auth/base/auth-provider";
 import { ClientsManager } from "@root/components/clients";
 import { ProfilesManager } from "@root/components/profiles";
 import { VerifyManager } from "@root/components/secure/VerifyManager";

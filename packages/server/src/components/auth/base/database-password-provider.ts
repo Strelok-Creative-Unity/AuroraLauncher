@@ -1,7 +1,7 @@
 import { HashHelper } from "@aurora-launcher-arsland-team/core";
 import { argon2Verify, bcryptVerify } from "hash-wasm";
 
-import { DatabaseAuthProviderConfig } from "./DatabaseAuthProvider";
+import { DatabaseAuthProviderConfig } from "../providers/database-auth-provider";
 
 export class DatabasePasswordProvider {
     private pattern = /(\w+)\s*(\((.*)\))?(\s*\+\s*(.*))?/;

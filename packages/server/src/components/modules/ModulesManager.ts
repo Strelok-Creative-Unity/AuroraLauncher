@@ -4,9 +4,9 @@ import path from "path";
 import { LauncherServer } from "@root/LauncherServer";
 import { ILauncherServerModule, IModuleInfo, LogHelper, StorageHelper } from "@root/utils";
 import chalk from "chalk";
+import { Service } from "typedi";
 
 import { LangManager } from "../langs";
-import { Service } from "typedi";
 
 @Service()
 export class ModulesManager {
